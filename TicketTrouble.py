@@ -1,20 +1,22 @@
 import operator
 
 def parse(buffer):
-
+    #parses the data file to make it accessible for execution
     line = buffer.split('\n')
     #putting all the data into a list of lists
     newfile = []
     for x in line:
+        #taking every line and putting it into a list
         values = x.strip().split()
         newfile += (values,)
     return newfile
 
 def solution(file):
-
+    #this method provides the main solution to the question.
+    #it returns the largest possible number of the friends that could actually be seated all in the same-numbered row of seats
+    #it also returns the number of test cases
     f = file[0]
     tot = int(f[0])
-    d = {}
     rows = []
     result = []
     rowCount = 0
@@ -23,21 +25,20 @@ def solution(file):
     x=1
     F=0
     while x<tot+1:
-        d["Case #{0}".format(x)] = 0
         #this condition is because you don't want to change the value of a in the very first run
         if a<len(file):
             if F!=0:
                 a+=F+1
             F = int(file[a][0])
             S = int(file[a][1])
-            print("F: ", F, "S: ", S)
-            print("w",a,"+1: ", a+1, (a+F))
+            # print("F: ", F, "S: ", S)
+            # print("w",a,"+1: ", a+1, (a+F))
 
             for n in range(1, S+1):
             #from the number 1 --> max grid size. Iterates through all the numbers that could possibly be on the ticket
             #splitting the section that containing the number of relevant tickets
                 section = file[a + 1: a + F + 1]
-                print("section: ", section)
+                # print("section: ", section)
                 #because the section is a list in a list I used this way to remove duplicates in 'section'. Removing duplicates because if there are duplicates
                 #it means that there is no chance that the friends will sit in the same row.
                 b_set = set(tuple(x) for x in section)
@@ -46,7 +47,7 @@ def solution(file):
 
                 for i in b:
                 # for every ticket that each friend has in this section
-                    print("are the numbers of line",i,":", "equal to ", n)
+                #     print("are the numbers of line",i,":", "equal to ", n)
                     #there is a max number of rows/columns so that would be the max number on the ticket (x, y), therefore I'm iterating through
                     #each ticket to see if x or y is equal to the numbers from 1 --> max number one by one.. if the number appears it gets appended to
                     #the list 'rows'.
@@ -61,24 +62,24 @@ def solution(file):
             #we take the max number from the list rows that's from this section and put it into a new list called 'tots'.
             rows = []
             #reset the list for the next section
-
-            d["Case #{0}".format(x)] = result[x-1]
         x+=1
+        #increase the counter to move onto the next case.
 
-    x = {1: 2, 3: 4, 4: 3, 2: 1, 0: 0}
-    sorted_d = sorted(d.items(), key=operator.itemgetter(0))
-    return sorted_d
-
-
+    return result, tot
 
 def main():
-    '''This function executes the functions for parsing the file and executing the commands for the lights
-
-    It returns the final count of lights turned on and the time it takes to execute this program'''
-
-    f = open('ticketsample.txt').read()
+    f = open('TTlarge.in').read()
     p = parse(f)
     s = solution(p)
-    print(s)
+    i=1
+    #sending the information to a txt file.
+    with open('TTlarge_result.txt', 'w') as f:
+        while i < s[1]+1:
+            print("writing")
+            #because write() only takes one string argument, you need to concatenate the strings, instead of using commas.
+            f.write("Case #" + str(i) + ": " + str(s[0][i - 1]) + "\n")
+            i+=1
+    f.close()
 
 main()
+
