@@ -2,6 +2,7 @@ import argparse
 import urllib.request
 import numpy as np
 
+
 def parse(buffer):
 
     line = buffer.split('\n')
@@ -9,19 +10,33 @@ def parse(buffer):
     for x in line:
         values = x.strip().split()
         newfile += (values,)
-    A = np.array(newfile)
-    return A
+    # print(newfile)
+    # print(" ")
+    # print(newfile[0], newfile[1][1])
+    return newfile
+
+def f6(seq):
+   # Not order preserving
+   set = Set(seq)
+   return list(set)
 
 def solution(file):
     # file = [(x,) for x in file]
+    # print(file)
+    if type(file) is list:
+        print("a list")
+    elif type(file) is tuple:
+        print('a tuple')
+    else:
+        print('neither a tuple or a list')
     f = file[0]
     tot = int(f[0])
     print(tot)
     d = {}
     rows = []
-    cols = []
+    same = []
     rowCount = 0
-    colCount = 0
+    sameCount = 0
     a=1
     x=1
     F=0
@@ -35,25 +50,33 @@ def solution(file):
             S = int(file[a][1])
             w = a
             print("F: ", F, "S: ", S)
-            # for n in range(1, S):
-            # print("n", n)
             print("w",w,"+1: ", w+1, (w+F))
 
-            for n in range(1, S):
+            for n in range(1, S+1):
 
-                for i in range(w+1, (w+F+1)):
-                    print("are the numbers of line",i,":", file[i][0], "or ", file[i][1], "equal to ", n)
-                    if int(file[i][0])== n or int(file[i][1]) == n:
+                # for i in range(w+1, (w+F+1)):
+                section = file[w + 1: w + F + 1]
+                print("section: ", section)
+                myList = sorted(set(section))
+                print("section: ", section)
+                for i in section:
+                    # print(i)
+                    # print(i[0])
+                    print("are the numbers of line",i,":", "equal to ", n)
+
+                    if int(i[0])== n or int(i[1]) == n:
                         rowCount+=1
                         print("rowcount", rowCount)
+
+
                     # if int(file[i][1]) == n:
                     #     colCount+=1
                     #     print("colCount", colCount)
 
             # x += 1
                 rows.append(rowCount)
-                cols.append(colCount)
-                print("rows: ", rows,"cols:", cols)
+                same.append(sameCount)
+                print("rows: ", rows,"same:", same)
                 rowCount = 0
                 # colCount = 0
             # for i in range(1, S):
@@ -65,7 +88,7 @@ def solution(file):
                 # if cols[i] > cols[i+1]:
                 #     cMax = cols[i]
                 # else:
-            cMax = max(cols)
+            cMax = max(same)
             if cMax>rMax:
                 d["Case #{0}".format(x)] = cMax
             else:
